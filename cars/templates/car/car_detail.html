@@ -1,0 +1,82 @@
+{% extends "navbar.html" %}
+{% load static tailwind_tags %}
+{% load humanize %}
+
+{% block title %}
+    {{ car.name }} - CarHub
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 capitalize">
+    <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+            <!-- Main Image -->
+            <div>
+                <img src="{{ car.image.url }}" alt="{{ car.name }}" class="w-full h-72 md:h-full object-cover rounded-md shadow">
+                {% if request.user.is_staff %}
+                <div class="mt-4 text-center">
+                    <a href="{% url 'add_car_image' car.id %}" 
+                       class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-medium">
+                        Upload More Images
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Car Info -->
+            <div class="space-y-4">
+                <h1 class="text-3xl font-bold text-gray-800">{{ car.name }}</h1>
+                <p class="text-lg text-gray-500">{{ car.brand.name }}</p>
+
+                <div class="grid grid-cols-2 gap-4 text-sm text-gray-700 mt-4">
+                    <p><span class="font-semibold">Price:</span> 
+                        <span class="text-green-600 text-lg font-bold">${{ car.price|floatformat:2|intcomma }}</span>
+                    </p>
+                    <p><span class="font-semibold">Year:</span> {{ car.year_of_manufacture }}</p>
+                    <p><span class="font-semibold">Mileage:</span> {{ car.mileage|default:"N/A" }} km</p>
+                    <p><span class="font-semibold">Condition:</span> {{ car.condition|title }}</p>
+                    <p><span class="font-semibold">Fuel Type:</span> {{ car.fuel_type|title }}</p>
+                    <p><span class="font-semibold">Transmission:</span> {{ car.transmission|title }}</p>
+                    <p><span class="font-semibold">Engine:</span> {{ car.engine_capacity }} L</p>
+                    <p><span class="font-semibold">Color:</span> <span class="capitalize">{{ car.color }}</span></p>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-800 mt-4">Description</h2>
+                    <p class="text-gray-600 mt-2 leading-relaxed">{{ car.description }}</p>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center justify-between pt-6">
+                    <form action="{% url 'add_to_cart' car.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition font-medium">
+                            Add to Cart
+                        </button>
+                    </form>
+                    <button onclick="history.back()" 
+                            class="bg-gray-600 text-white px-5 py-2 rounded hover:bg-gray-700 transition font-medium">
+                        Go Back
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Car Gallery -->
+        {% if car.images.all %}
+        <div class="px-6 pb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mt-10 mb-4">Car Gallery</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {% for image in car.images.all %}
+                <div class="rounded overflow-hidden shadow hover:shadow-lg transition transform hover:scale-105">
+                    <img src="{{ image.image.url }}" alt="Gallery Image" class="w-full h-40 object-cover">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

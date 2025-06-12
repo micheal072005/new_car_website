@@ -1,0 +1,30 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home' ),
+    path('register/', views.register, name='register' ),
+    path('login/', views.user_login, name='login' ),
+    path('login-out/', views.user_logout, name='logout' ),
+    path('about/', views.about, name='about' ),
+    path("contact/", views.contact, name="contact"),
+    path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('car_list/', views.car_list, name='car_list'),
+    path('add_car/', views.add_car, name='add_car'),
+    path('car_detail/<int:car_id>/', views.car_detail, name='car_detail'),
+    path('edit_car/<int:car_id>/', views.edit_car, name='edit_car'),
+    path('delete_car/<int:car_id>/', views.delete_car, name='delete_car'),
+    path('dashboard/delete_message/<int:message_id>/', views.delete_message, name='delete_message'),
+    path('car/<int:car_id>/add-image/', views.add_car_image, name='add_car_image'),
+    path('cart/', views.view_cart, name='cart'),
+    path('cart/add/<int:car_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path("cart_items/", views.cart_items, name="cart_items"),
+    path('confirm_payment/', views.checkout, name='checkout'),
+    path('pending-payments/', views.pending_payment_list, name='pending_payments'),
+    path('confirm_payment/<int:payment_id>/', views.confirm_payment, name='confirm_payment'),
+    path('all-cars/', views.all_cars, name='all_cars'),
+    path('brand-list/', views.brand_list, name='brand_list'),
+    path('brand/edit/<int:brand_id>/', views.edit_brand, name='edit_brand'),
+    path('brand/delete/<int:brand_id>/', views.delete_brand, name='delete_brand'),
+]

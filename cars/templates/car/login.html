@@ -1,0 +1,64 @@
+{% extends "navbar.html" %}
+
+{% block title %}Login - CarHub{% endblock %}
+
+{% block content %}
+<div class=" flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Login to Your Account</h2>
+
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-medium">Email</label>
+                <input type="email" id="email" name="email" required 
+                    class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-300">
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700 font-medium">Password</label>
+                <div class="relative">
+                    <input type="password" id="login_password" name="password" required 
+                        class="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-green-300 pr-10">
+                    
+                    <!-- Eye Icon Button Inside Input -->
+                    <button type="button" onclick="togglePassword('login_password', 'eyeIconOpen_login', 'eyeIconSlash_login')" 
+                        class="absolute inset-y-0 right-3 flex items-center">
+                        <svg id="eyeIconOpen_login" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" 
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M15.58 12c0 1.58-1.27 2.86-2.86 2.86s-2.86-1.27-2.86-2.86 1.27-2.86 2.86-2.86 2.86 1.27 2.86 2.86z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 12s3.6-7 9-7 9 7 9 7-3.6 7-9 7-9-7-9-7z"/>
+                        </svg>
+
+                        <svg id="eyeIconSlash_login" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 hidden"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M10.94 10.94a3 3 0 014.12 4.12M21 12s-3.6 7-9 7-9-7-9-7 3.6-7 9-7 9 7 9 7z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-6">
+                <button type="submit" 
+                    class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition">
+                    Login
+                </button>
+            </div>
+        </form>
+
+        <!-- Register Link -->
+        <p class="mt-4 text-center text-gray-600">
+            Don't have an account? 
+            <a href="{% url 'register' %}" class="text-green-600 font-medium hover:underline">Sign up</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

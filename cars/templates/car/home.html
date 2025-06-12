@@ -1,0 +1,105 @@
+{% extends "navbar.html" %}
+{% load static tailwind_tags %}
+{% load humanize %}
+
+{% block title %}
+    Home - CarHub
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100">
+    <div class="container mx-auto px-4">
+
+        <!-- Featured Cars Section -->
+        <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center" data-aos="fade-up" data-aos-duration="1000">Featured Cars</h2>
+
+        {% if featured_cars %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 capitalize">
+    
+            {% for car in featured_cars %}
+            <div class="border rounded-lg shadow-lg bg-white overflow-hidden hover:shadow-2xl transition-shadow duration-300" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:1 }}00">
+                <!-- Entire Card Clickable <a href="{% url 'car_detail' car.pk %}" class="block">-->
+                <a href="{% url 'car_detail' car.pk %}" class="block">
+                    <img src="{{ car.image.url }}" alt="{{ car.name }}" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 truncate">{{ car.name }}</h3>
+                        <p class="text-sm text-gray-600">{{ car.brand.name }}</p>
+                        <p class="text-lg font-bold text-green-500 mt-2"> ${{ car.price|floatformat:2|intcomma }}</p>
+                        <p class="text-gray-600 mt-2 text-sm truncate">{{ car.description }}</p>
+                    </div>
+                </a>
+                <!-- Purchase Button (Not Inside the Clickable Card) -->
+                <div class="p-6 pt-0">
+                    <a href="{% url 'checkout' %}?car_id={{ car.id }}" onclick="return confirm('Are you sure you want to purchase this car?')" class="block bg-green-500 w-full text-white text-center py-1 rounded-lg hover:bg-green-600">
+                        Purchase
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center text-gray-600 mt-8" data-aos="fade-in" data-aos-duration="1000">No featured cars available at the moment. Check back later!</p>
+        {% endif %}
+
+        <!-- Popular Car Categories Section -->
+        <div class="mt-12">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center" data-aos="fade-up">Popular Car Categories</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="border rounded-lg shadow-lg bg-white text-center p-6" data-aos="flip-right">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Sedans</h3>
+                    <p class="text-gray-600 mb-4">Stylish and comfortable, perfect for daily commutes.</p>
+                    <a href="{% url 'car_list' %}?category=sedan" class="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+                        Explore Sedans
+                    </a>
+                </div>
+                <div class="border rounded-lg shadow-lg bg-white text-center p-6" data-aos="flip-right">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">SUVs</h3>
+                    <p class="text-gray-600 mb-4">Spacious and rugged for your adventurous side.</p>
+                    <a href="{% url 'car_list' %}?category=suv" class="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+                        Explore SUVs
+                    </a>
+                </div>
+                <div class="border rounded-lg shadow-lg bg-white text-center p-6" data-aos="flip-right">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Trucks</h3>
+                    <p class="text-gray-600 mb-4">Tough and reliable for heavy-duty tasks.</p>
+                    <a href="{% url 'car_list' %}?category=truck" class="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+                        Explore Trucks
+                    </a>
+                </div>
+                <div class="border rounded-lg shadow-lg bg-white text-center p-6" data-aos="flip-right">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Electric Cars</h3>
+                    <p class="text-gray-600 mb-4">Eco-friendly and innovative vehicles for a sustainable future.</p>
+                    <a href="{% url 'car_list' %}?category=electric" class="inline-block bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+                        Explore Electric Cars
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Testimonials Section -->
+        <div class="mt-12 bg-gray-100 py-12">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-8 text-center" data-aos="fade-up">What Our Customers Say</h2>
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {% for testimonial in testimonials %}
+                    <div class="p-6 bg-white border rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:1 }}00">
+                        <p class="text-gray-600 mb-4">"{{ testimonial.text }}"</p>
+                        <p class="font-semibold text-gray-800">{{ testimonial.name }}</p>
+                        <p class="text-sm text-gray-500">{{ testimonial.role }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="mt-12 text-center" data-aos="zoom-in">
+            <h3 class="text-xl font-semibold text-gray-800">Looking for Something Specific?</h3>
+            <p class="text-gray-600 mt-2">Use our advanced filters to find the perfect car that suits your needs.</p>
+            <a href="{% url 'car_list' %}" class="mt-6 inline-block bg-blue-600 text-white px-8 py-3 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out">
+                Search Now
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

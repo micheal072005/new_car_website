@@ -1,0 +1,111 @@
+{% extends "navbar.html" %}
+{% load static tailwind_tags %}
+
+{% block title %}Edit - Cars{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Edit Car</h2>
+    <form action="" method="POST" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <div>
+            <label class="block text-gray-700">Car Name</label>
+            <input type="text" name="name" value="{{ car.name }}" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Brand</label>
+            <select name="brand" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                {% for brand in brands %}
+                    <option value="{{ brand.id }}" {% if brand.id == car.brand.id %}selected{% endif %}>{{ brand.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Price ($)</label>
+            <input type="number" name="price" value="{{ car.price }}" class="w-full p-2 border border-gray-300 rounded-lg" 
+                required onkeydown="if(event.key === 'e' || event.key === 'E') event.preventDefault();">
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Description</label>
+            <textarea name="description" rows="4" class="w-full p-2 border border-gray-300 rounded-lg">{{ car.description }}</textarea>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Year of Manufacture</label>
+            <input type="number" name="year_of_manufacture" value="{{ car.year_of_manufacture }}" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Mileage (km)</label>
+            <input type="number" name="mileage" value="{{ car.mileage }}" class="w-full p-2 border border-gray-300 rounded-lg" min="0" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Condition</label>
+            <select name="condition" class="w-full p-2 border border-gray-300 rounded-lg">
+                <option value="new" {% if car.condition == "new" %}selected{% endif %}>New</option>
+                <option value="used" {% if car.condition == "used" %}selected{% endif %}>Used</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Transmission</label>
+            <select name="transmission" class="w-full p-2 border border-gray-300 rounded-lg">
+                <option value="automatic" {% if car.transmission == "automatic" %}selected{% endif %}>Automatic</option>
+                <option value="manual" {% if car.transmission == "manual" %}selected{% endif %}>Manual</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Fuel Type</label>
+            <select name="fuel_type" class="w-full p-2 border border-gray-300 rounded-lg">
+                <option value="petrol" {% if car.fuel_type == "petrol" %}selected{% endif %}>Petrol</option>
+                <option value="diesel" {% if car.fuel_type == "diesel" %}selected{% endif %}>Diesel</option>
+                <option value="electric" {% if car.fuel_type == "electric" %}selected{% endif %}>Electric</option>
+                <option value="hybrid" {% if car.fuel_type == "hybrid" %}selected{% endif %}>Hybrid</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Engine Capacity (L)</label>
+            <input type="number" name="engine_capacity" value="{{ car.engine_capacity }}" step="0.1" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Color</label>
+            <input type="text" name="color" value="{{ car.color }}" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+
+        <!-- Car Quantity -->
+        <div>
+            <label class="block text-gray-700">Quantity in Stock</label>
+            <input type="number" name="quantity" value="{{ car.quantity }}" min="0" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Car Image</label>
+            <input type="file" name="image" class="w-full p-2 border border-gray-300 rounded-lg">
+            <p class="text-gray-600">Current Image: <img src="{{ car.image.url }}" alt="Car Image" class="w-32  rounded-md mt-2"></p>
+        </div>
+        
+        <div class="flex items-center justify-between">
+            <label class="inline-flex items-center">
+                <input type="checkbox" name="is_available" {% if car.is_available %}checked{% endif %} class="form-checkbox h-5 w-5 text-blue-600">
+                <span class="ml-2 text-gray-700">Available for Sale</span>
+            </label>
+
+            <div onclick="history.back()" class="bg-blue-500 cursor-pointer text-white text-sm py-1 px-3 rounded-lg shadow hover:bg-blue-600 transition">
+                Go Back
+            </div>
+        </div>
+        
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">Update</button>
+    </form>
+</div>
+
+{% endblock content %}

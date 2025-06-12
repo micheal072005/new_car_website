@@ -1,0 +1,108 @@
+{% extends "navbar.html" %}
+{% load static tailwind_tags %}
+
+{% block title %}Add - cars{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Add a Car</h2>
+    <form action="" method="POST" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <div>
+            <label class="block text-gray-700">Car Name</label>
+            <input type="text" name="name" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Brand</label>
+            <select name="brand" class="w-full p-2 border border-gray-300 rounded-lg" required>
+                {% for brand in brands %}
+                    <option value="{{ brand.id }}">{{ brand.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Price ($)</label>
+            <input type="number" name="price" class="w-full p-2 border border-gray-300 rounded-lg appearance-none" 
+                required onkeydown="if(event.key === 'e' || event.key === 'E') event.preventDefault();">
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Description</label>
+            <textarea name="description" rows="4" class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Year of Manufacture</label>
+            <input type="number" name="year_of_manufacture" class="w-full p-2 border border-gray-300 rounded-lg"  placeholder="e.g. 2005" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Mileage (km)</label>
+            <input type="number" name="mileage" class="w-full p-2 border border-gray-300 rounded-lg" min="0" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Condition</label>
+            <select name="condition" class="w-full p-2 border border-gray-300 rounded-lg">
+                <option value="new">New</option>
+                <option value="used">Used</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Transmission</label>
+            <select name="transmission" class="w-full p-2 border border-gray-300 rounded-lg">
+                <option value="automatic">Automatic</option>
+                <option value="manual">Manual</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Fuel Type</label>
+            <select name="fuel_type" class="w-full p-2 border border-gray-300 rounded-lg">
+                <option value="petrol">Petrol</option>
+                <option value="diesel">Diesel</option>
+                <option value="electric">Electric</option>
+                <option value="hybrid">Hybrid</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Engine Capacity (L)</label>
+            <input type="number" name="engine_capacity" step="0.1" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Color</label>
+            <input type="text" name="color" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+
+        <!-- Car Quantity -->
+        <div>
+            <label class="block text-gray-700">Quantity in Stock</label>
+            <input type="number" name="quantity" min="0" value="1" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="block text-gray-700">Car Image</label>
+            <input type="file" name="image" class="w-full p-2 border border-gray-300 rounded-lg" required>
+        </div>
+        
+        <div>
+            <label class="inline-flex items-center">
+                <input type="checkbox" name="is_available" checked class="form-checkbox h-5 w-5 text-blue-600">
+                <span class="ml-2 text-gray-700">Available for Sale</span>
+            </label>
+        </div>
+        
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Add Car</button>
+    </form>
+</div>
+
+{% endblock content %}
+
+

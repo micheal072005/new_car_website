@@ -1,0 +1,27 @@
+{% extends "navbar.html" %}
+{% load static tailwind_tags %}
+
+
+{% block title %}
+    Upload Images for {{ car.name }} - CarHub
+{% endblock %}
+
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Add Images for {{ car.name }}</h2>
+
+    <form action="{% url 'add_car_image' car.id %}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+
+        <label class="block text-gray-700 font-medium">Upload Images:</label>
+        <input type="file" name="images" multiple class="border p-2 w-full rounded-md">
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+            Upload Images
+        </button>
+    </form>
+
+    <a href="{% url 'car_detail' car.id %}" class="text-blue-500 mt-4 inline-block">Back to Car Details</a>
+</div>
+{% endblock %}

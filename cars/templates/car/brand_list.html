@@ -1,0 +1,33 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block title %}Brand List - Admin{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">All Brands</h2>
+    <div class="space-y-4">
+        {% for brand in brands %}
+        <div class="bg-white border rounded-lg shadow hover:shadow-md transition p-4 flex items-center justify-between">
+            <div class="flex items-center">
+                {% if brand.logo %}
+                <img src="{{ brand.logo.url }}" alt="{{ brand.name }}" class="w-16 h-16 object-contain mr-4">
+                {% else %}
+                <div class="w-16 h-16 bg-gray-100 flex items-center justify-center rounded-full text-gray-400 text-sm mr-4">
+                    No Logo
+                </div>
+                {% endif %}
+                <h3 class="text-lg font-semibold text-gray-700">{{ brand.name }}</h3>
+            </div>
+            <!-- Add actions like edit or delete if needed -->
+            <div class="flex space-x-4">
+                <a href="{% url 'edit_brand' brand.id %}" class="text-blue-500 hover:text-blue-700">Edit</a>
+                <a href="{% url 'delete_brand' brand.id %}" class="text-red-500 hover:text-red-700">Delete</a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-gray-500">No brands found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static tailwind_tags %}
+    {% load humanize %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% tailwind_css %}
+    <title class="capitalize">{% block title %}Car Website{% endblock title %}</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/cars.css' %}">
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+</head>
+<body class="bg-gray-100 text-gray-900 ">
+  <!-- Navbar -->
+  <nav class=" bg-gray-100 shadow-lg fixed left-0 right-0 z-[100] capitalize">
+          <div class="flex justify-between px-5 sm:px-12 items-center py-1">
+              <!-- Logo -->
+              <div class="text-2xl font-bold text-blue-500">
+                  <a href="/">CarHub</a>
+              </div>
+              <!-- Links -->
+              <div class="hidden md:flex space-x-6">
+                <a href="{% url 'home' %}" class="font-medium  text-[14px] py-2 {% if request.path == '/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}"> Home</a>
+                  
+                {% if request.user.is_staff %}
+                    <a href="{% url 'admin_dashboard' %}" class="font-medium text-[14px] py-2 {% if request.path == '/dashboard/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Dashboard</a>             
+                    
+                    <a href="{% url 'add_car' %}" class="font-medium text-[14px] py-2 {% if request.path == '/add_car/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Add Cars</a>
+                {% endif %}
+
+                <a href="{% url 'about' %}" class="font-medium text-[14px] py-2 {% if request.path == '/about/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">About</a>
+             
+                <a href="{% url 'car_list' %}" class="font-medium text-[14px] py-2 {% if request.path == '/car_list/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Cars</a>
+
+                <a href="{% url 'cart' %}" class="font-medium text-[14px] py-2 relative  {% if request.path == '/cart/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+                    <p>carts</p>
+                    <span id="cart_number" class="animate-bounc absolute hidden -top-[1px] -right-1 bg-red-600 text-white text-[10px] font-bold text-center w-[16px] h-[16px] rounded-full"></span>
+                </a>
+
+             
+                {% if not request.user.is_staff %}
+                    <a href="{% url 'contact' %}" class="block font-medium text-[14px] py-2 {% if request.path == '/contact/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Contact</a>
+                {% endif %}
+             
+             {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="font-medium text-[14px] py-2 
+                         {% if request.path == '/logout/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Logout
+                </a>
+             {% else %}
+                 <a href="{% url 'register' %}" class="font-medium text-[14px] py-2 
+                          {% if request.path == '/register/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Register
+                 </a>
+             
+                 <a href="{% url 'login' %}" class="font-medium text-[14px] py-2 
+                          {% if request.path == '/login/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Login
+                 </a>
+             {% endif %}
+             
+                  
+              </div>
+              <!-- Mobile Menu Button -->
+              <div id="menu-btn" class="md:hidden cursor-pointer">
+                  <button id="menu-btn" class=" text-blue-500">
+                    <!-- Hamburger Icon -->
+                    <svg id="menu-icon" class="w-6 h-6 block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+
+                    <!-- Close (X) Icon -->
+                    <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+              </div>
+          </div>
+          <!-- Mobile Menu -->
+          <div id="menu" class="hidden md:hidden fixed bg-gray-100 shadow-lg pl-4 sm:pl-8 pr-[36px] left-0 bottom-0 top-[40px] ">
+            <a href="{% url 'home' %}" 
+            class="block font-medium text-[14px] py-2 
+                   {% if request.path == '/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+             Home
+         </a>
+         
+         {% if request.user.is_staff %}
+             <a href="{% url 'admin_dashboard' %}" 
+                class="block font-medium text-[14px] py-2 
+                       {% if request.path == '/dashboard/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+                 Dashboard
+             </a>
+         
+             <a href="{% url 'add_car' %}" 
+                class="block font-medium text-[14px] py-2 
+                       {% if request.path == '/add_car/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+                 Add Cars
+             </a>
+         {% endif %}
+         
+         <a href="{% url 'car_list' %}" 
+            class="block font-medium text-[14px] py-2 
+                   {% if request.path == '/car_list/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+             Cars
+         </a>
+         
+         <a href="{% url 'about' %}" 
+            class="block font-medium text-[14px] py-2 
+                   {% if request.path == '/about/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+             About
+         </a>
+         
+         {% if not request.user.is_staff %}
+             <a href="{% url 'contact' %}" 
+                class="block font-medium text-[14px] py-2 
+                       {% if request.path == '/contact/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+                 Contact
+             </a>
+         {% endif %}
+         
+         {% if request.user.is_authenticated %}
+             <a href="{% url 'logout' %}" 
+                class="block  font-medium text-[14px] py-2 
+                       {% if request.path == '/logout/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+                 Logout
+             </a>
+         {% else %}
+             <a href="{% url 'register' %}" 
+                class="block font-medium text-[14px] py-2 
+                       {% if request.path == '/register/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+                 Register
+             </a>
+         
+             <a href="{% url 'login' %}" 
+                class="block font-medium text-[14px] py-2 
+                       {% if request.path == '/login/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">
+                 Login
+             </a>
+         {% endif %}
+          </div>
+  </nav>
+
+  <!-- Delete Confirmation Dialog -->
+  <dialog id="myDialog" class="p-6 bg-white rounded-lg shadow-xl w-96 border border-gray-200">
+    <!-- Icon -->
+    <div class="flex justify-center">
+        <div class="w-16 h-16 flex items-center justify-center rounded-full border-4 border-orange-300">
+            <svg class="w-8 h-8 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M5 13h14M12 3v1m6.364 1.636l-.707.707M18 12a6 6 0 11-12 0 6 6 0 0112 0zm-6-8v2"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Title -->
+    <h2 class="text-center text-xl font-semibold text-gray-800 mt-4">Are you sure?</h2>
+
+    <!-- Message -->
+    <p class="text-center text-gray-600 mt-2">This action cannot be undone!</p>
+
+    <!-- Buttons -->
+    <div class="mt-6 flex justify-center gap-4">
+        <button onclick="closeDialog()" 
+            class="px-5 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-200">
+            Cancel
+        </button>
+        <button id="confirmDeleteBtn" 
+            class="px-5 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-200">
+            Yes, delete it!
+        </button>
+    </div>
+  </dialog>
+
+
+    <!-- Messages -->
+  <center class="fixed z-[100] right-0 left-0  top-[35px]">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="message capitalize text-center py-2 text-white font-medium text-[15px]
+          {% if message.level_tag == 'success' %}
+            bg-[#4CAF50] 
+          {% elif message.level_tag == 'error' %}
+            bg-[#e53e3e] 
+          {% elif message.level_tag == 'warning' %}
+            bg-[#f6ad55]  
+          {% else %}
+            bg-[#48bb78] 
+          {% endif %}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </center>
+
+  
+  <!-- Swiper Wrapper -->
+  <div class="swiper bg-gray-900 h-[400px] md:h-[500px] text-white relative mb-10">
+    <!-- Swiper Wrapper -->
+    <div class="swiper-wrapper text-center">
+        <!-- Slide 1 -->
+        <div class="swiper-slide">
+            <div class="relative h-full">
+                <img src="{% static 'img/car1.jpg' %}" class="w-full h-full object-cover md:object-center blur-sm" alt="Car 1">
+            </div>
+            <div class="absolute top-1/3 right-0 left-0 px-4 md:px-6 text-center">
+                <h1 class="text-xl md:text-4xl font-bold">Welcome to Your Car Marketplace</h1>
+                <p class="mt-4 text-sm md:text-lg">Explore the best cars, new and used, at unbeatable prices.</p>
+                <a href="{% url 'car_list' %}" class="mt-6 inline-block bg-green-500 text-white py-2 px-4 md:py-3 md:px-6 rounded hover:bg-green-600">Browse Cars</a>
+            </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="swiper-slide">
+            <div class="relative h-full">
+                <img src="{% static 'img/car4.jpg' %}" class="w-full h-full object-cover md:object-center blur-sm" alt="Car 4">
+            </div>
+            <div class="absolute top-1/3 right-0 left-0 px-4 md:px-6 text-center">
+                <h1 class="text-xl md:text-4xl font-bold">Find Your Dream Car</h1>
+                <p class="mt-4 text-sm md:text-lg">Discover a wide range of vehicles tailored to your needs.</p>
+                <a href="{% url 'car_list' %}" class="mt-6 inline-block bg-green-500 text-white py-2 px-4 md:py-3 md:px-6 rounded hover:bg-green-600">View Listings</a>
+            </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="swiper-slide">
+            <div class="relative h-full">
+                <img src="{% static 'img/car3.jpg' %}" class="w-full h-full object-cover md:object-center blur-sm" alt="Car 3">
+            </div>
+            <div class="absolute top-1/3 right-0 left-0 px-4 md:px-6 text-center">
+                <h1 class="text-xl md:text-4xl font-bold">Trusted by Thousands</h1>
+                <p class="mt-4 text-sm md:text-lg">Join our satisfied customers today!</p>
+                <a href="{% url 'car_list' %}" class="mt-6 inline-block bg-green-500 text-white py-2 px-4 md:py-3 md:px-6 rounded hover:bg-green-600">Get Started</a>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Swiper Pagination -->
+    <div class="swiper-pagination"></div>
+  
+    <!-- Swiper Navigation -->
+    <div class="swiper-button-next w-8 h-8"></div>
+    <div class="swiper-button-prev w-8 h-8"></div>
+  </div>
+
+  <!-- Content -->
+      {% block content %}
+      {% endblock %}
+
+
+  <footer class="bg-gray-800 text-white py-10 mt-10">
+        <div class="container mx-auto px-6 lg:px-20">
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10" data-aos="fade-up">
+                <!-- About Section -->
+                <div data-aos="fade-up">
+                    <h3 class="text-2xl font-bold mb-4">CarHub</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Your trusted car marketplace to find the best vehicles tailored to your needs. We make buying and selling cars easy and reliable.
+                    </p>
+                </div>
+    
+                <!-- Quick Links Section -->
+                <div data-aos="fade-up">
+                    <h3 class="text-2xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/about/" class="hover:underline hover:text-blue-400">About</a></li>
+                        <li><a href="/contact/" class="hover:underline hover:text-blue-400">Contact</a></li>
+                        <li><a href="/privacy/" class="hover:underline hover:text-blue-400">Privacy Policy</a></li>
+                        <li><a href="/terms/" class="hover:underline hover:text-blue-400">Terms of Service</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Social Media Section -->
+                <div data-aos="fade-up">
+                    <h3 class="text-2xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex flex-col space-y-4 md:space-y-4 md:flex-col">
+                        <a href="#" class="text-lg font-medium text-gray-300 hover:text-blue-500 transition duration-300">
+                            Facebook
+                        </a>
+                        <a href="#" class="text-lg font-medium text-gray-300 hover:text-blue-500 transition duration-300">
+                            Twitter
+                        </a>
+                        <a href="#" class="text-lg font-medium text-gray-300 hover:text-blue-500 transition duration-300">
+                            Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Divider -->
+            <hr class="my-6 border-gray-600" data-aos="zoom-in">
+    
+            <!-- Bottom Section -->
+            <div class="text-center text-gray-400 text-sm" data-aos=>
+                <p>&copy; 2024 CarHub. All rights reserved.</p>
+                <p class="mt-2">
+                    Designed by <a href="/" class="hover:underline hover:text-blue-400">CarHub Team</a>
+                </p>
+            </div>
+        </div>
+  </footer>
+  
+
+  <script src="{% static 'js/car.js' %}"></script>
+
+  <script>
+
+    $(document).ready(function(){
+        $.ajax({
+            url: "/cart_items/",  // make sure this matches your URL pattern
+            type: "GET",
+            success: function(response){
+                if(response.cart_number > 0){
+                    cart_number = document.getElementById('cart_number')
+                    cart_number.classList.remove('hidden');
+                    cart_number.innerHTML = response.cart_number;
+                } else {
+                    cart_number =  document.getElementById('cart_number');
+                    cart_number.classList.add('hidden');
+
+                }
+            }
+        });
+    });
+    
+</script>
+
+</body>
+</html>

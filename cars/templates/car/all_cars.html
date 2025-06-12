@@ -1,0 +1,62 @@
+{% extends 'navbar.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <h2 class="text-2xl font-bold mb-6">All Cars (Admin View)</h2>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-lg shadow">
+            <thead class="bg-gray-100  text-left text-sm font-semibold text-gray-600">
+                <tr>
+                    <th class="px-4 py-3">Image</th>
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Brand</th>
+                    <th class="px-4 py-3">Price</th>
+                    <th class="px-4 py-3">Year</th>
+                    <th class="px-4 py-3">Transmission</th>
+                    <th class="px-4 py-3">Fuel</th>
+                    <th class="px-4 py-3">Condition</th>
+                    <th class="px-4 py-3">Quantity</th>
+                    <th class="px-4 py-3">Available</th>
+                    <th class="px-4 py-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for car in cars %}
+                <tr class="border-t text-sm text-gray-700 capitalize">
+                    <td class="px-4 py-2">
+                        <img src="{{ car.image.url }}" alt="{{ car.name }}" class="h-12 w-20 object-cover rounded">
+                    </td>
+                    <td class="px-4 py-2">{{ car.name }}</td>
+                    <td class="px-4 py-2">{{ car.brand.name }}</td>
+                    <td class="px-4 py-2">${{ car.price }}</td>
+                    <td class="px-4 py-2">{{ car.year_of_manufacture }}</td>
+                    <td class="px-4 py-2">{{ car.transmission|capfirst }}</td>
+                    <td class="px-4 py-2">{{ car.fuel_type|capfirst }}</td>
+                    <td class="px-4 py-2">{{ car.condition|capfirst }}</td>
+                    <td class="px-4 py-2">{{ car.quantity }}</td>
+                    <td class="px-4 py-2">
+                        {% if car.is_available %}
+                            <span class="text-green-600 font-semibold">Yes</span>
+                        {% else %}
+                            <span class="text-red-600 font-semibold">No</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-2">
+                        <a href="{% url 'car_detail' car.id %}" class="text-blue-600 hover:underline">View</a>
+                        |
+                        <a href="{% url 'edit_car' car.id %}" class="text-yellow-600 hover:underline">Edit</a>
+                        |
+                        <a href="{% url 'delete_car' car.id %}" class="text-red-600 hover:underline">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="11" class="text-center py-4 text-gray-500">No cars found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

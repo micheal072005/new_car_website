@@ -1,0 +1,161 @@
+{% extends "navbar.html" %}
+{% load static tailwind_tags %}
+{% load humanize %}
+
+{% block title %}
+    Car Listings - CarHub
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 ">
+    <!-- Filter and Search Section -->
+    <div class="bg-gray-100 p-6 rounded-lg shadow-md mb-8">
+        <form method="get" action="{% url 'car_list' %}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Search -->
+            <div>
+                <label for="search" class="block text-gray-700 font-medium mb-2">Search</label>
+                <input 
+                    type="text" 
+                    id="search" 
+                    name="search" 
+                    value="{{ request.GET.search }}" 
+                    placeholder="Search for cars..." 
+                    class="w-full px-4 py-2 border rounded-lg">
+            </div>
+
+            <!-- Brand -->
+            <div>
+                <label for="brand" class="block text-gray-700 font-medium mb-2">Brand</label>
+                <input 
+                    type="text" 
+                    id="brand" 
+                    name="brand" 
+                    value="{{ request.GET.brand }}" 
+                    placeholder="Brand" 
+                    class="w-full px-4 py-2 border rounded-lg">
+            </div>
+
+            <!-- Year -->
+            <div>
+                <label for="year" class="block text-gray-700 font-medium mb-2">Year of Manufacture</label>
+                <input 
+                    type="number" 
+                    id="year" 
+                    name="year" 
+                    value="{{ request.GET.year }}" 
+                    placeholder="e.g. 2005"
+                    class="w-full px-4 py-2 border rounded-lg">
+            </div>
+
+            <!-- Condition -->
+            <div>
+                <label for="condition" class="block text-gray-700 font-medium mb-2">Condition</label>
+                <select 
+                    id="condition" 
+                    name="condition" 
+                    class="w-full px-4 py-2 border rounded-lg">
+                    <option value="">All</option>
+                    <option value="new" {% if request.GET.condition == 'new' %}selected{% endif %}>New</option>
+                    <option value="used" {% if request.GET.condition == 'used' %}selected{% endif %}>Used</option>
+                </select>
+            </div>
+
+            <!-- Fuel Type -->
+            <div>
+                <label for="fuel_type" class="block text-gray-700 font-medium mb-2">Fuel Type</label>
+                <select 
+                    id="fuel_type" 
+                    name="fuel_type" 
+                    class="w-full px-4 py-2 border rounded-lg">
+                    <option value="">All</option>
+                    <option value="petrol" {% if request.GET.fuel_type == 'petrol' %}selected{% endif %}>Petrol</option>
+                    <option value="diesel" {% if request.GET.fuel_type == 'diesel' %}selected{% endif %}>Diesel</option>
+                    <option value="electric" {% if request.GET.fuel_type == 'electric' %}selected{% endif %}>Electric</option>
+                    <option value="hybrid" {% if request.GET.fuel_type == 'hybrid' %}selected{% endif %}>Hybrid</option>
+                </select>
+            </div>
+
+            <!-- Transmission -->
+            <div>
+                <label for="transmission" class="block text-gray-700 font-medium mb-2">Transmission</label>
+                <select 
+                    id="transmission" 
+                    name="transmission" 
+                    class="w-full px-4 py-2 border rounded-lg">
+                    <option value="">All</option>
+                    <option value="automatic" {% if request.GET.transmission == 'automatic' %}selected{% endif %}>Automatic</option>
+                    <option value="manual" {% if request.GET.transmission == 'manual' %}selected{% endif %}>Manual</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="md:col-span-3 text-center">
+                <button 
+                    type="submit" 
+                    class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Car Listings -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-6 capitalize">
+        {% for car in page_obj %}
+        <div class="border rounded-lg shadow-lg overflow-hidden">
+            <!-- Entire Card Clickable -->
+            <a href="{% url 'car_detail' car.pk %}" class="block">
+                <img src="{{ car.image.url }}" alt="{{ car.name }}" class="w-full h-64 object-cover">
+                <div class="px-4 py-2">
+                    <h3 class="text-xl font-semibold text-gray-800 truncate">{{ car.name }}</h3>
+                    <p class="text-sm text-gray-600">{{ car.brand.name }}</p>
+                    <p class="text-lg font-bold text-green-500 mt-2"> ${{ car.price|floatformat:2|intcomma }}</p>
+                    <p class="text-gray-600 mt-2 text-sm truncate">{{ car.description }}</p>
+                </div>
+            </a>
+            
+            <div class="px-4 py-2 pb-6">
+
+                <div class="flex justify-between gap-x-8">
+                    <a href="{% url 'car_detail' car.pk %}" class="mt-4 hidden bloc bg-blue-500 w-full text-white text-center py-1 rounded-lg hover:bg-blue-600">
+                        View Details
+                    </a> 
+                    <a href="{% url 'checkout' %}?car_id={{ car.id }}" onclick="return confirm('Are you sure you want to purchase this car?')" class="mt-4 block bg-green-500 w-full text-white text-center py-1 rounded-lg hover:bg-green-600">
+                        purchase
+                    </a> 
+                </div> 
+
+                {% if request.user.is_staff  %}
+                <div class="flex justify-between gap-x-8">
+                    <a href="{% url 'edit_car' car.pk %}" class="mt-4 block bg-blue-500 w-full text-white text-center py-1 rounded-lg hover:bg-blue-600">
+                        Edit car
+                    </a> 
+                    <button onclick="openDialog({{car.id}}, 'delete_car')" class="mt-4 block bg-red-500 w-full text-white text-center py-1 rounded-lg hover:bg-red-600">
+                        Delete Car
+                    </button>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-8 flex justify-center items-center space-x-2">
+        {% if page_obj.has_previous %}
+        <a href="?page=1&search={{ query }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}&search={{ query }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Previous</a>
+        {% endif %}
+
+        <span class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&search={{ query }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}&search={{ query }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Last</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
