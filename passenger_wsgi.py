@@ -1,0 +1,1 @@
+from car_project.wsgi import application
