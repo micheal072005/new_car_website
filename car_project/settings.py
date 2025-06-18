@@ -18,7 +18,7 @@ SECRET_KEY = 'django-insecure-8j!ho(0bfld3wb)c2(gjg&d&*gpavfwa1isb$2xp3)!m+e@%_+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['carhub-0af2.onrender.com']
+ALLOWED_HOSTS = ['carhub-0af2.onrender.com', 'localhost', '127.0.0.1']
 
 
 load_dotenv()
