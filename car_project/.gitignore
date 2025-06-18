@@ -1,0 +1,34 @@
+# Ignore Python cache files  
+__pycache__/  
+*.pyc  
+*.pyo  
+
+# Ignore virtual environment (if using one)  
+venv/  
+env/  
+.venv/  # Add this too if you're using .venv (common on Windows)
+
+# Ignore database files  
+*.sqlite3  
+
+# Ignore IDE/editor settings  
+.vscode/  
+.idea/  
+
+# Ignore compiled files  
+*.pyd  
+*.so  
+*.dll  
+
+# Ignore logs and temp files  
+*.log  
+*.tmp  
+
+# Ignore environment config  
+.env  
+
+# Ignore media (user-uploaded content)  
+media/
+
+# Ignore staticfiles folder (if using collectstatic in production)  
+staticfiles/
