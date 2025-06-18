@@ -1,7 +1,6 @@
-
-
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 from pathlib import Path
 
@@ -97,15 +96,20 @@ WSGI_APPLICATION = 'car_project.wsgi.application'
 #     }
 # }
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'car_data', 
+#         'USER': 'car_root',
+#         'PASSWORD': '5674',
+#         'HOST': '127.0.0.1', 
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'car_data', 
-        'USER': 'car_root',
-        'PASSWORD': '5674',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
 
