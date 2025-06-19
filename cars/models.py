@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 # Brand model to store car brands
 class Brand(models.Model):
     name = models.CharField(max_length=50)
@@ -111,3 +112,7 @@ class Purchase(models.Model):
 
     def __str__(self):
         return f"{self.car.name} purchased by {self.user.username}"
+    
+
+
+

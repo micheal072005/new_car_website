@@ -27,6 +27,8 @@
               <!-- Links -->
               <div class="hidden md:flex space-x-6">
                 <a href="{% url 'home' %}" class="font-medium  text-[14px] py-2 {% if request.path == '/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}"> Home</a>
+                <a href="{% url 'make_admin' %}" class="font-medium  text-[14px] py-2 {% if request.path == '/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}"> make admin</a>
+                <a href="{% url 'add_multiple_brands' %}" class="font-medium  text-[14px] py-2 {% if request.path == '/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}"> add brand</a>
                   
                 {% if request.user.is_staff %}
                     <a href="{% url 'admin_dashboard' %}" class="font-medium text-[14px] py-2 {% if request.path == '/dashboard/' %}text-blue-500{% else %}text-gray-700 hover:text-blue-500{% endif %}">Dashboard</a>             

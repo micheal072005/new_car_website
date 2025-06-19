@@ -15,7 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8j!ho(0bfld3wb)c2(gjg&d&*gpavfwa1isb$2xp3)!m+e@%_+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
+
+
 
 ALLOWED_HOSTS = ['carhub-0af2.onrender.com', 'localhost', '127.0.0.1']
 
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
     'cars',
 ]
 
+
+
 TAILWIND_APP_NAME = 'theme'
 
 INTERNAL_IPS = [
@@ -64,6 +68,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
+
+
+# I added this
+if DEBUG:
+    INSTALLED_APPS += ["django_browser_reload"]
+    MIDDLEWARE += ["django_browser_reload.middleware.BrowserReloadMiddleware"]
 
 ROOT_URLCONF = 'car_project.urls'
 

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.contrib import messages
 from .utils import send_welcome_email
@@ -13,6 +14,9 @@ from django.utils import timezone
 from datetime import datetime
 from .models import *
 from .forms import *
+
+
+
 
 def logout_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -390,6 +394,7 @@ def view_cart(request):
     return render(request, "car/cart.html", {"cart": cart})
 
 
+# Remove item from cart
 @login_required(login_url='login')
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
@@ -563,5 +568,34 @@ def delete_brand(request, brand_id):
         return redirect('all_brands')
 
     return render(request, 'brands/delete_brand.html', {'brand': brand})
+
+
+def make_admin(request):
+
+    user  = get_object_or_404(User, username='sonmikeagudozie@gmail.com')
+
+    if not user.is_superuser:
+        user.is_superuser = True
+        user.is_staff = True
+        user.save()
+        messages.success(request, "User has been made an admin successfully.")
+
+
+    return redirect('home')
+
+
+def add_multiple_brands(request):
+    brand_names = [
+        "Toyota", "Honda", "BMW", "Mercedes-Benz", "Ford",
+        "Hyundai", "Kia", "Nissan", "Chevrolet", "Volkswagen"
+    ]
+    
+    created_count = 0
+    for name in brand_names:
+        obj, created = Brand.objects.get_or_create(name=name)
+        if created:
+            created_count += 1
+
+    return HttpResponse(f"{created_count} brands added successfully.")
 
 
