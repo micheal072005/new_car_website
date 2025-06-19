@@ -69,9 +69,7 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
-if DEBUG:
-    INSTALLED_APPS += ['django_browser_reload']
-    MIDDLEWARE += ["django_browser_reload.middleware.BrowserReloadMiddleware"]
+
 
 ROOT_URLCONF = 'car_project.urls'
 
