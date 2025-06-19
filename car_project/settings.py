@@ -69,6 +69,8 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
+ROOT_URLCONF = 'car_project.urls'
+
 
 
 TEMPLATES = [
